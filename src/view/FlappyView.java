@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -41,9 +42,12 @@ public class FlappyView extends Application implements Observer{
 	private AnimationTimer timer;
 	private GameController controller;
 	private static final int ticksPerFrame = 1;
-	
 	private Player player;
-	
+	private File backGroundPath;
+	private Image backGroundImage;
+	private File foreGroundPath;
+	private Image foreGroundImage;
+	private int foreGroundX;
 	/**
 	 * make the scene
 	 * draw the background
@@ -55,6 +59,7 @@ public class FlappyView extends Application implements Observer{
 	public void start(Stage primaryStage) throws Exception {
 		this.stage = primaryStage;
 		setScene();
+		initImages();
 		drawBackground();
 		this.controller = new GameController();
 		controller.setObserver(this);
@@ -125,10 +130,12 @@ public class FlappyView extends Application implements Observer{
 	 */
 	private void drawBackground() {
 		graphicsContext.clearRect(0, 0,FlappyConstants.SCREEN_WIDTH, FlappyConstants.SCREEN_HEIGHT);
-		graphicsContext.setFill(Color.GREEN);
-		graphicsContext.fillRect(0, 0,FlappyConstants.SCREEN_WIDTH, FlappyConstants.SCREEN_HEIGHT);
-		graphicsContext.setFill(Color.TAN);
-		graphicsContext.fillRect(0, FlappyConstants.GROUND_Y, FlappyConstants.SCREEN_WIDTH, FlappyConstants.SCREEN_HEIGHT);
+		graphicsContext.drawImage(backGroundImage, 0, 0);
+		if (foreGroundX < -FlappyConstants.SCREEN_WIDTH) {
+			foreGroundX = 0;			
+		}
+		graphicsContext.drawImage(foreGroundImage, foreGroundX, FlappyConstants.GROUND_Y);
+		foreGroundX -= FlappyConstants.PIPE_MOVEMENT;
 		
 	}
 
@@ -158,6 +165,14 @@ public class FlappyView extends Application implements Observer{
 
 		
 	}
+	
+	public void initImages() {
+		backGroundPath = new File("resources/flappyBackground.png");
+		backGroundImage = new Image(backGroundPath.toURI().toString(), FlappyConstants.SCREEN_WIDTH, FlappyConstants.SCREEN_HEIGHT, false, false);
+		foreGroundPath = new File("resources/flappyforeGround.png");
+		foreGroundImage = new Image(foreGroundPath.toURI().toString(), 2 * FlappyConstants.SCREEN_WIDTH, FlappyConstants.GROUND_HEIGHT, false, false);
+	}
+
 	
 
 }

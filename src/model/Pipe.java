@@ -4,7 +4,6 @@ package model;
 import java.io.File;
 import java.util.Random;
 import model.FlappyConstants;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -18,6 +17,10 @@ public class Pipe implements Drawable{
 	private int width = FlappyConstants.PIPE_WIDTH;
 	private Color color = Color.YELLOW;
 	private boolean wasPassed;
+	private File topPipePath;
+	private File bottomPipePath;
+	private Image topPipeImage;
+	private Image bottomPipeImage;
 
 	/**
 	 * Needs to know where to start the pipes
@@ -32,6 +35,14 @@ public class Pipe implements Drawable{
 		this.bottomYCoord = FlappyConstants.PIPE_SPACING + topHeight;
 		this.bottomHeight = FlappyConstants.SCREEN_HEIGHT - bottomYCoord - FlappyConstants.GROUND_HEIGHT;
 		this.wasPassed = false;
+		initImages();
+	}
+	
+	private void initImages() {
+		topPipePath = new File("resources/flappyPipetop.png");
+		bottomPipePath = new File("resources/flappyPipeBottom.png");
+		this.topPipeImage = new Image(topPipePath.toURI().toString(), FlappyConstants.PIPE_WIDTH, topHeight, false, false);
+		this.bottomPipeImage = new Image(bottomPipePath.toURI().toString(), FlappyConstants.PIPE_WIDTH, bottomHeight, false, false);
 	}
 
 	/**
@@ -40,8 +51,10 @@ public class Pipe implements Drawable{
 	@Override
 	public void drawSelf(GraphicsContext graphicsContext) {
 		graphicsContext.setFill(color);
-		graphicsContext.fillRect(xCoord, topYCoord, width, topHeight);
-		graphicsContext.fillRect(xCoord, bottomYCoord, width, bottomHeight);
+		//graphicsContext.fillRect(xCoord, topYCoord, width, topHeight);
+		graphicsContext.drawImage(topPipeImage, xCoord, topYCoord);
+		//graphicsContext.fillRect(xCoord, bottomYCoord, width, bottomHeight);
+		graphicsContext.drawImage(bottomPipeImage, xCoord, bottomYCoord);
 		
 		
 	}

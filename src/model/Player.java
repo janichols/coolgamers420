@@ -15,7 +15,12 @@ public class Player {
 	private int maxDownVelocity;
 	private int jumpAmount;
 	private int score;
-
+	private File neutralFlappyBirdPath;
+	private Image neutralFlappyBirdImage;
+	private File upFlappyBirdPath;
+	private File downFlappyBirdPath;
+	private Image upFlappyBirdImage;
+	private Image downFlappyBirdImage;
 
 	/**
 	 * Init values
@@ -28,6 +33,7 @@ public class Player {
 		this.maxDownVelocity = FlappyConstants.TERMINAL_VELOCITY;
 		this.jumpAmount = FlappyConstants.JUMP_HEIGHT;
 		this.score = 0;
+		initImage();
 
 	}
 	
@@ -56,8 +62,15 @@ public class Player {
 	 * @param graphicsContext
 	 */
 	public void drawSelf(GraphicsContext graphicsContext) {
-		graphicsContext.setFill(Color.YELLOW);
-		graphicsContext.fillRect(xCoord, yCoord, FlappyConstants.FLAPPY_WIDTH, FlappyConstants.FLAPPY_WIDTH);
+		if (downVelocity < 0) {
+			graphicsContext.drawImage(upFlappyBirdImage, xCoord, yCoord);
+		}
+		else if (downVelocity > 0) {
+			graphicsContext.drawImage(downFlappyBirdImage, xCoord, yCoord);
+		}
+		else {
+			graphicsContext.drawImage(neutralFlappyBirdImage, xCoord, yCoord);
+		}
 		
 	}
 	
@@ -103,5 +116,13 @@ public class Player {
 		return score;
 	}
 
+	private void initImage() {
+		neutralFlappyBirdPath = new File("resources/flappyBird.png");
+		neutralFlappyBirdImage = new Image(neutralFlappyBirdPath.toURI().toString(), FlappyConstants.FLAPPY_WIDTH, FlappyConstants.FLAPPY_WIDTH, false, false);
+		upFlappyBirdPath = new File("resources/flappyBirdUp.png");
+		upFlappyBirdImage = new Image(upFlappyBirdPath.toURI().toString(), FlappyConstants.FLAPPY_WIDTH, FlappyConstants.FLAPPY_WIDTH, false, false);
+		downFlappyBirdPath = new File("resources/flappyBirdDown.png");
+		downFlappyBirdImage = new Image(downFlappyBirdPath.toURI().toString(), FlappyConstants.FLAPPY_WIDTH, FlappyConstants.FLAPPY_WIDTH, false, false);
+	}
 
 }
